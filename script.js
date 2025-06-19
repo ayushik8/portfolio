@@ -1,5 +1,3 @@
-
-// Add basic scroll reveal effect
 window.addEventListener('scroll', () => {
   document.querySelectorAll('.project').forEach((el) => {
     const top = el.getBoundingClientRect().top;
