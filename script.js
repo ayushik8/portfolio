@@ -163,3 +163,104 @@ window.addEventListener("load", () => {
   document.querySelector(".hero__content").style.opacity = "1";
   document.querySelector(".hero__content").style.transform = "translateY(0)";
 });
+
+
+/* =========================
+   PROGRESS BAR
+========================= */
+
+const progressBar = document.getElementById("scroll-progress");
+
+window.addEventListener("scroll", () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.body.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+
+  progressBar.style.width = progress + "%";
+});
+
+// MOUSE GLOW 
+const glow = document.getElementById("bg-glow");
+
+document.addEventListener("mousemove", (e) => {
+  const x = e.clientX;
+  const y = e.clientY;
+
+  glow.style.left = x + "px";
+  glow.style.top = y + "px";
+});
+
+// CIRCUIT GRID
+const canvas = document.getElementById("bg-canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let nodes = [];
+const spacing = 80;
+
+function createGrid() {
+  nodes = [];
+
+  for (let x = 0; x < canvas.width; x += spacing) {
+    for (let y = 0; y < canvas.height; y += spacing) {
+      nodes.push({
+        x,
+        y,
+        baseX: x,
+        baseY: y,
+        vx: Math.random() * 0.3,
+        vy: Math.random() * 0.3
+      });
+    }
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // lines
+  for (let i = 0; i < nodes.length; i++) {
+    const a = nodes[i];
+
+    for (let j = i + 1; j < nodes.length; j++) {
+      const b = nodes[j];
+
+      const dx = a.x - b.x;
+      const dy = a.y - b.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(217,119,6,0.08)";
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  // nodes
+  for (let n of nodes) {
+    n.x += Math.sin(Date.now() * 0.0005 + n.baseX) * 0.2;
+    n.y += Math.cos(Date.now() * 0.0005 + n.baseY) * 0.2;
+
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(217,119,6,0.4)";
+    ctx.fill();
+  }
+
+  requestAnimationFrame(draw);
+}
+
+createGrid();
+draw();
+
+// RESIZE
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  createGrid();
+});
