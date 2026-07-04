@@ -179,17 +179,6 @@ window.addEventListener("scroll", () => {
   progressBar.style.width = progress + "%";
 });
 
-// MOUSE GLOW 
-const glow = document.getElementById("bg-glow");
-
-document.addEventListener("mousemove", (e) => {
-  const x = e.clientX;
-  const y = e.clientY;
-
-  glow.style.left = x + "px";
-  glow.style.top = y + "px";
-});
-
 // CIRCUIT GRID
 const canvas = document.getElementById("bg-canvas");
 const ctx = canvas.getContext("2d");
@@ -263,4 +252,12 @@ window.addEventListener("resize", () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   createGrid();
+});
+
+// mobile toggle 
+const mobileToggle = document.getElementById("mobileToggle");
+const navLinks = document.querySelector(".nav__links");
+
+mobileToggle.addEventListener("click", () => {
+  navLinks.classList.toggle("active");
 });
