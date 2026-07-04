@@ -222,7 +222,7 @@ function draw() {
 
       if (dist < 120) {
         ctx.beginPath();
-        ctx.strokeStyle = "rgba(217,119,6,0.08)";
+        ctx.strokeStyle = "rgba(217,119,6,0.06)";
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
         ctx.stroke();
