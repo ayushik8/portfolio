@@ -1,54 +1,1007 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ayushi Kate</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Code+Pro&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yoshi — ECE @ UT Austin</title>
+<meta name="description" content="Yoshi — Electrical & Computer Engineering senior at UT Austin. Embedded systems, signal processing, safety-critical software, and biosignal ML. Seeking Fall 2026 co-op opportunities.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314100d'/%3E%3Cpath d='M4 34h10l4-14 8 26 6-18 4 6h24' stroke='%23ff6a2c' stroke-width='4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#14100d;
+    --bg-elev:#1c1611;
+    --bg-elev-2:#251c15;
+    --border:#332619;
+    --orange:#ff6a2c;
+    --orange-soft:#ff8c4d;
+    --amber:#ffb454;
+    --signal:#5eead4;
+    --text:#f5efe8;
+    --text-dim:#a89a8c;
+    --text-faint:#6f6459;
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'IBM Plex Sans', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+    --container:1160px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  body.menu-open{ overflow:hidden; }
+
+  /* faint PCB-grid texture on the page */
+  body{
+    background-image:
+      linear-gradient(rgba(255,106,44,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,106,44,0.035) 1px, transparent 1px);
+    background-size:56px 56px;
+    background-position:center top;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--orange);
+    outline-offset:3px;
+    border-radius:2px;
+  }
+
+  .container{
+    max-width:var(--container);
+    margin:0 auto;
+    padding:0 clamp(1.25rem, 5vw, 3rem);
+  }
+
+  section{ position:relative; }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--orange);
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+    margin-bottom:1rem;
+  }
+  .eyebrow .idx{ color:var(--text-faint); }
+
+  h1,h2,h3,h4{
+    font-family:var(--font-display);
+    font-weight:700;
+    letter-spacing:-0.01em;
+    line-height:1.05;
+  }
+
+  .section-head{
+    max-width:640px;
+    margin-bottom:3rem;
+  }
+  .section-head h2{
+    font-size:clamp(1.9rem, 4vw, 2.6rem);
+    margin-bottom:0.75rem;
+  }
+  .section-head h2 em{
+    font-style:normal;
+    color:var(--orange);
+  }
+  .section-head p{
+    color:var(--text-dim);
+    font-size:1.02rem;
+  }
+
+  .pad{ padding:6.5rem 0; }
+  @media (max-width:720px){ .pad{ padding:4.25rem 0; } }
+
+  .divider{
+    border-top:1px solid var(--border);
+  }
+
+  /* ============ NAV ============ */
+  header.site-nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    background:rgba(20,16,13,0.78);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    max-width:var(--container);
+    margin:0 auto;
+    padding:0 clamp(1.25rem, 5vw, 3rem);
+    height:68px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .logo{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:0.02em;
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+  }
+  .logo .dot{ color:var(--orange); }
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap:2.1rem;
+  }
+  .nav-links a{
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    letter-spacing:0.03em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    position:relative;
+    padding:0.3rem 0;
+    transition:color 0.2s ease;
+  }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-links a.active{ color:var(--orange); }
+  .nav-links a.btn-line{
+    color:var(--orange);
+    border:1px solid var(--orange);
+    padding:0.45rem 0.9rem;
+    border-radius:3px;
+  }
+  .nav-links a.btn-line:hover{ background:rgba(255,106,44,0.1); }
+
+  .nav-toggle{
+    display:none;
+    background:none;
+    border:none;
+    color:var(--text);
+    width:32px; height:32px;
+    position:relative;
+    cursor:pointer;
+  }
+  .nav-toggle span{
+    position:absolute; left:4px; right:4px;
+    height:2px; background:var(--text);
+    transition:transform 0.25s ease, opacity 0.25s ease;
+  }
+  .nav-toggle span:nth-child(1){ top:10px; }
+  .nav-toggle span:nth-child(2){ top:16px; }
+  .nav-toggle span:nth-child(3){ top:22px; }
+  .nav-toggle[aria-expanded="true"] span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] span:nth-child(2){ opacity:0; }
+  .nav-toggle[aria-expanded="true"] span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+  @media (max-width:800px){
+    .nav-toggle{ display:block; }
+    .nav-links{
+      position:fixed;
+      top:68px; left:0; right:0; bottom:0;
+      background:var(--bg);
+      flex-direction:column;
+      justify-content:center;
+      gap:2rem;
+      transform:translateX(100%);
+      transition:transform 0.3s ease;
+    }
+    .nav-links.open{ transform:translateX(0); }
+    .nav-links a{ font-size:1.1rem; }
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    padding-top:calc(68px + 5rem);
+    padding-bottom:0;
+    min-height:92vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .hero-glow{
+    position:absolute;
+    top:10%;
+    left:50%;
+    width:900px; height:900px;
+    transform:translateX(-50%);
+    background:radial-gradient(circle, rgba(255,106,44,0.14), transparent 65%);
+    pointer-events:none;
+    z-index:0;
+  }
+  .hero .container{ position:relative; z-index:1; }
+
+  .hero h1{
+    font-size:clamp(3.4rem, 11vw, 7rem);
+    color:var(--text);
+  }
+  .hero h1 .accent{ color:var(--orange); }
+
+  .hero-tagline{
+    max-width:620px;
+    font-size:clamp(1.05rem, 1.6vw, 1.25rem);
+    color:var(--text-dim);
+    margin:1.6rem 0 1.4rem;
+  }
+  .hero-tagline strong{ color:var(--text); font-weight:600; }
+
+  .current-line{
+    font-family:var(--font-mono);
+    font-size:0.88rem;
+    color:var(--text-dim);
+    margin-bottom:2.2rem;
+  }
+  .current-line strong{ color:var(--signal); font-weight:500; }
+  .current-line .sep{ color:var(--text-faint); margin:0 0.5rem; }
+
+  .cta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:1rem;
+    margin-bottom:3.5rem;
+  }
+  .btn{
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    letter-spacing:0.02em;
+    padding:0.85rem 1.5rem;
+    border-radius:4px;
+    display:inline-flex;
+    align-items:center;
+    gap:0.5rem;
+    transition:transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-primary{
+    background:var(--orange);
+    color:#191008;
+    font-weight:600;
+  }
+  .btn-primary:hover{ background:var(--orange-soft); transform:translateY(-2px); }
+  .btn-ghost{
+    border:1px solid var(--border);
+    color:var(--text);
+  }
+  .btn-ghost:hover{ border-color:var(--orange); transform:translateY(-2px); }
+
+  /* ticker */
+  .ticker-wrap{
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    overflow:hidden;
+    white-space:nowrap;
+    padding:0.9rem 0;
+    background:var(--bg-elev);
+  }
+  .ticker{
+    display:inline-flex;
+    animation:ticker-scroll 32s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .ticker{ animation:none; } }
+  .ticker span{
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    padding:0 1.4rem;
+  }
+  .ticker span.hl{ color:var(--orange); }
+  @keyframes ticker-scroll{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+
+  /* waveform */
+  .waveform-wrap{
+    width:100%;
+    line-height:0;
+    background:var(--bg-elev);
+  }
+  .waveform{ width:100%; height:90px; display:block; }
+  .waveform path{ stroke:var(--signal); stroke-width:2; fill:none; }
+
+  /* stat strip */
+  .stat-strip{
+    background:var(--bg-elev);
+    border-bottom:1px solid var(--border);
+  }
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+  }
+  .stat{
+    padding:2.4rem 1.5rem;
+    text-align:center;
+    border-left:1px solid var(--border);
+  }
+  .stat:first-child{ border-left:none; }
+  .stat-num{
+    font-family:var(--font-display);
+    font-size:clamp(1.8rem, 3.4vw, 2.6rem);
+    font-weight:700;
+    color:var(--orange);
+  }
+  .stat:nth-child(2) .stat-num{ color:var(--signal); }
+  .stat:nth-child(3) .stat-num{ color:var(--amber); }
+  .stat-label{
+    font-size:0.85rem;
+    color:var(--text-dim);
+    margin-top:0.4rem;
+    max-width:220px;
+    margin-inline:auto;
+  }
+  @media (max-width:720px){
+    .stat-grid{ grid-template-columns:1fr; }
+    .stat{ border-left:none; border-top:1px solid var(--border); }
+    .stat:first-child{ border-top:none; }
+  }
+
+  /* ============ ABOUT ============ */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    gap:4rem;
+    align-items:start;
+  }
+  .about-bio p{
+    font-size:1.05rem;
+    color:var(--text-dim);
+    margin-bottom:1.2rem;
+  }
+  .about-bio strong{ color:var(--text); font-weight:600; }
+  .about-facts{
+    display:flex;
+    flex-direction:column;
+    gap:1.6rem;
+  }
+  .fact-label{
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin-bottom:0.35rem;
+  }
+  .fact-value{
+    font-size:1rem;
+    color:var(--text);
+  }
+  @media (max-width:800px){
+    .about-grid{ grid-template-columns:1fr; gap:2.5rem; }
+  }
+
+  /* ============ SKILLS ============ */
+  .skill-group{ margin-bottom:2.2rem; }
+  .skill-group h4{
+    font-family:var(--font-mono);
+    font-weight:500;
+    font-size:0.85rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin-bottom:0.9rem;
+  }
+  .pill-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.6rem;
+  }
+  .pill{
+    font-family:var(--font-mono);
+    font-size:0.82rem;
+    padding:0.5rem 0.9rem;
+    border:1px solid var(--border);
+    border-radius:3px;
+    color:var(--text);
+    background:var(--bg-elev);
+    transition:border-color 0.2s ease, color 0.2s ease;
+  }
+  .pill:hover{ border-color:var(--orange); color:var(--orange-soft); }
+
+  /* ============ WORK ============ */
+  .work-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1.5rem;
+  }
+  .work-card{
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:1.9rem;
+    display:flex;
+    flex-direction:column;
+    transition:border-color 0.25s ease, transform 0.25s ease;
+  }
+  .work-card:hover{ border-color:var(--orange); transform:translateY(-3px); }
+  .work-card.featured{ grid-column:1 / -1; }
+  .work-badge{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:0.8rem;
+  }
+  .work-card h3{
+    font-size:1.25rem;
+    margin-bottom:0.7rem;
+  }
+  .work-card p{
+    color:var(--text-dim);
+    font-size:0.95rem;
+    flex-grow:1;
+    margin-bottom:1.1rem;
+  }
+  .tag-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.5rem;
+  }
+  .tag{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.03em;
+    color:var(--signal);
+    border:1px solid rgba(94,234,212,0.28);
+    padding:0.28rem 0.6rem;
+    border-radius:20px;
+  }
+  @media (max-width:720px){
+    .work-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ============ EXPERIENCE ============ */
+  .timeline{
+    position:relative;
+    padding-left:2.2rem;
+    border-left:1px solid var(--border);
+  }
+  .timeline-item{
+    position:relative;
+    padding-bottom:2.8rem;
+  }
+  .timeline-item:last-child{ padding-bottom:0; }
+  .timeline-item::before{
+    content:'';
+    position:absolute;
+    left:-2.2rem;
+    top:0.35rem;
+    width:11px; height:11px;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--orange);
+  }
+  .timeline-item.current::before{ background:var(--orange); }
+  .timeline-date{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    letter-spacing:0.04em;
+    color:var(--text-faint);
+    margin-bottom:0.4rem;
+  }
+  .timeline-item h3{
+    font-size:1.1rem;
+    margin-bottom:0.15rem;
+  }
+  .timeline-item h3 .org{ color:var(--orange-soft); }
+  .timeline-item p{
+    color:var(--text-dim);
+    font-size:0.95rem;
+    max-width:600px;
+    margin-top:0.5rem;
+  }
+
+  /* ============ CONTACT ============ */
+  .contact-inner{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:2.5rem;
+  }
+  .contact-links{
+    display:flex;
+    flex-direction:column;
+    gap:0.9rem;
+  }
+  .contact-links a{
+    font-family:var(--font-display);
+    font-size:clamp(1.3rem, 2.6vw, 1.9rem);
+    font-weight:600;
+    color:var(--text);
+    display:inline-flex;
+    align-items:center;
+    gap:0.6rem;
+    transition:color 0.2s ease;
+    width:fit-content;
+  }
+  .contact-links a:hover{ color:var(--orange); }
+  .contact-links a .arrow{ color:var(--orange); font-family:var(--font-body); }
+
+  footer{
+    border-top:1px solid var(--border);
+    padding:2rem 0;
+  }
+  .footer-inner{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:1rem;
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--text-faint);
+  }
+</style>
 </head>
 <body>
-  <nav>
-    <div class="nav-container">
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a href="#top" class="logo">YOSHI<span class="dot">.</span></a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
       <a href="#about">About</a>
-      <a href="#projects">Projects</a>
       <a href="#contact">Contact</a>
-    </div>
-  </nav>
+      <a href="resume.pdf" class="btn-line" target="_blank" rel="noopener">Résumé ↗</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
 
-  <header class="hero">
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <div class="hero-glow"></div>
     <div class="container">
-      <h1>Ayushi Kate</h1>
-      <p class="tagline">Your tagline goes here</p>
+      <p class="eyebrow">ECE &middot; UT Austin &middot; Class of 2027</p>
+      <h1>Yoshi<span class="accent">.</span></h1>
+      <p class="hero-tagline">
+        I work where <strong>hardware meets stakes</strong> — embedded software that has to be right
+        the first time, and biosignal models that learn what a body is trying to say. ECE senior at
+        UT Austin, earning a <strong>Certificate in Humanitarian Engineering</strong> alongside it.
+      </p>
+      <p class="current-line">
+        Currently: interviewing for <strong>Fall 2026 co-ops</strong>
+        <span class="sep">·</span> President @ <strong>Texas InventionWorks</strong>
+      </p>
+      <div class="cta-row">
+        <a href="#work" class="btn btn-primary">View Work →</a>
+        <a href="#experience" class="btn btn-ghost">Experience</a>
+        <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+      </div>
     </div>
-  </header>
 
-  <main>
-    <section id="about" class="container">
-      <h2>About</h2>
-      <p>This is a short bio section where you can talk about yourself, your background, and interests.</p>
-    </section>
+    <div class="ticker-wrap" aria-hidden="true">
+      <div class="ticker" id="ticker">
+        <span class="hl">EMBEDDED SYSTEMS</span><span>&middot;</span>
+        <span>SIGNAL PROCESSING</span><span>&middot;</span>
+        <span class="hl">FLIGHT SOFTWARE</span><span>&middot;</span>
+        <span>BIOSIGNAL ML</span><span>&middot;</span>
+        <span class="hl">PCB DESIGN</span><span>&middot;</span>
+        <span>HUMANITARIAN ENGINEERING</span><span>&middot;</span>
+        <span class="hl">EMBEDDED SYSTEMS</span><span>&middot;</span>
+        <span>SIGNAL PROCESSING</span><span>&middot;</span>
+        <span class="hl">FLIGHT SOFTWARE</span><span>&middot;</span>
+        <span>BIOSIGNAL ML</span><span>&middot;</span>
+        <span class="hl">PCB DESIGN</span><span>&middot;</span>
+        <span>HUMANITARIAN ENGINEERING</span><span>&middot;</span>
+      </div>
+    </div>
 
-    <section id="projects" class="container">
-      <h2>Projects</h2>
-      <div class="project-list">
-        <div class="project">
-          <h3>Project Title</h3>
-          <p>Short description of what this project is about.</p>
-          <a href="#">View Project</a>
+    <div class="waveform-wrap">
+      <svg class="waveform" viewBox="0 0 1400 120" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,60
+          C20,30 35,90 55,60
+          C75,20 95,100 115,55
+          C140,35 155,85 175,60
+          C195,45 205,75 225,58
+          C245,25 260,95 280,60
+          C300,40 315,80 335,58
+          C360,15 380,105 400,60
+          C420,35 440,85 460,58
+          C480,45 495,75 515,60
+          C535,20 555,100 575,58
+          C600,40 615,80 635,60
+          C660,30 680,90 700,58
+          C720,15 740,105 760,60
+          C780,40 800,80 820,58
+          C845,25 860,95 880,60
+          C900,45 915,75 935,58
+          C960,35 980,85 1000,60
+          C1020,20 1040,100 1060,58
+          C1080,40 1100,80 1120,60
+          C1145,15 1160,105 1180,58
+          C1200,35 1220,85 1240,60
+          C1260,45 1275,75 1295,58
+          C1320,25 1340,95 1360,60
+          C1380,40 1395,80 1400,60" />
+      </svg>
+    </div>
+
+    <div class="stat-strip">
+      <div class="container">
+        <div class="stat-grid">
+          <div class="stat">
+            <div class="stat-num"><span class="stat-num-val" data-target="93.47" data-suffix="%">0%</span></div>
+            <div class="stat-label">capstone model accuracy — AI-enhanced stress-detection wearable</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num"><span class="stat-num-val" data-target="93" data-suffix="%">0%</span></div>
+            <div class="stat-label">EEG seizure-classification accuracy, Lu Research Group</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">IFRC</div>
+            <div class="stat-label">humanitarian partner — solar lighting for a refugee camp</div>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="contact" class="container">
-      <h2>Contact</h2>
-      <p>Say hello at <a href="mailto:your@email.com">your@email.com</a></p>
-    </section>
-  </main>
+  <!-- ============ ABOUT ============ -->
+  <section class="pad" id="about">
+    <div class="container">
+      <div class="eyebrow"><span class="idx">01</span> — About</div>
+      <div class="about-grid">
+        <div class="about-bio">
+          <p>
+            I'm an <strong>Electrical and Computer Engineering senior</strong> at UT Austin, graduating in
+            <strong>May 2027</strong> alongside a Certificate in Humanitarian Engineering. I like problems
+            where the real signal is buried in noise — literally, in EEG traces and speech recordings, and
+            figuratively, in systems where "close enough" isn't good enough.
+          </p>
+          <p>
+            I've written embedded C for flight-control software held to <strong>DO-178</strong> standards at
+            Bell Textron, built an EEG seizure-classification pipeline to <strong>93% accuracy</strong>, and
+            led a stress-detection wearable to a <strong>93.47%-accuracy</strong> result and a Best Project
+            award.
+          </p>
+          <p>
+            Outside the lab, I lead <strong>Texas InventionWorks'</strong> makerspace team, and helped design
+            solar lighting for a refugee camp with the <strong>IFRC</strong> — because the same engineering
+            that keeps an aircraft safe should also be able to light a room for someone who needs it.
+          </p>
+        </div>
+        <div class="about-facts">
+          <div>
+            <div class="fact-label">Based in</div>
+            <div class="fact-value">Austin, Texas</div>
+          </div>
+          <div>
+            <div class="fact-label">Focus</div>
+            <div class="fact-value">Embedded Systems &middot; Signal Processing &middot; Safety-Critical Software</div>
+          </div>
+          <div>
+            <div class="fact-label">Education</div>
+            <div class="fact-value">B.S. Electrical & Computer Engineering, UT Austin &middot; Class of 2027</div>
+          </div>
+          <div>
+            <div class="fact-label">Also earning</div>
+            <div class="fact-value">Certificate in Humanitarian Engineering</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <footer>
-    <p>&copy; Your Name</p>
-  </footer>
+  <div class="container"><div class="divider"></div></div>
+
+  <!-- ============ SKILLS ============ -->
+  <section class="pad" id="skills">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow"><span class="idx">02</span> — Toolkit</div>
+        <h2>What I build <em>with</em></h2>
+        <p>Embedded hardware on one side, signals and models on the other.</p>
+      </div>
+
+      <div class="skill-group">
+        <h4>Embedded &amp; Low-Level</h4>
+        <div class="pill-row">
+          <span class="pill">Embedded C / C++</span>
+          <span class="pill">Real-Time Systems</span>
+          <span class="pill">GPIO &middot; UART &middot; SPI</span>
+          <span class="pill">Microcontrollers</span>
+          <span class="pill">PCB Design</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <h4>Signal Processing &amp; ML</h4>
+        <div class="pill-row">
+          <span class="pill">Biosignal Processing</span>
+          <span class="pill">EEG Analysis</span>
+          <span class="pill">Machine Learning</span>
+          <span class="pill">Speech Signal Processing</span>
+          <span class="pill">MATLAB / Simulink</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <h4>Safety-Critical &amp; Aerospace</h4>
+        <div class="pill-row">
+          <span class="pill">DO-178 Standards</span>
+          <span class="pill">IBM DOORS</span>
+          <span class="pill">Requirements Traceability</span>
+          <span class="pill">Flight Control Software</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <h4>Languages &amp; Tools</h4>
+        <div class="pill-row">
+          <span class="pill">C / C++</span>
+          <span class="pill">Python</span>
+          <span class="pill">MATLAB</span>
+          <span class="pill">Git</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container"><div class="divider"></div></div>
+
+  <!-- ============ WORK ============ -->
+  <section class="pad" id="work">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow"><span class="idx">03</span> — Selected Work</div>
+        <h2>Things I've <em>built</em></h2>
+        <p>A mix of senior design, undergraduate research, and a cause I care about.</p>
+      </div>
+
+      <div class="work-grid">
+        <div class="work-card featured">
+          <div class="work-badge">🏆 Best Project &middot; Senior Design Pilot Program</div>
+          <h3>AI-Enhanced Stress Detection Wearable</h3>
+          <p>
+            My senior capstone: a wearable that classifies stress in real time from biosignal input.
+            Reached 93.47% accuracy — the top result in its pilot cohort — and took home the Best
+            Project award.
+          </p>
+          <div class="tag-row">
+            <span class="tag">Machine Learning</span>
+            <span class="tag">Wearables</span>
+            <span class="tag">Biosignals</span>
+          </div>
+        </div>
+
+        <div class="work-card">
+          <div class="work-badge">Lu Research Group</div>
+          <h3>EEG Seizure Classification</h3>
+          <p>
+            Built a signal-acquisition and classification pipeline for EEG data, distinguishing
+            seizure activity at 93% accuracy.
+          </p>
+          <div class="tag-row">
+            <span class="tag">EEG</span>
+            <span class="tag">Signal Processing</span>
+            <span class="tag">Research</span>
+          </div>
+        </div>
+
+        <div class="work-card">
+          <div class="work-badge">Human Signals Lab</div>
+          <h3>Speech-Based Cognitive Impairment Detection</h3>
+          <p>
+            An ML pipeline that flags markers of cognitive impairment directly from speech
+            recordings — no wearable required.
+          </p>
+          <div class="tag-row">
+            <span class="tag">Speech Processing</span>
+            <span class="tag">ML</span>
+            <span class="tag">Research</span>
+          </div>
+        </div>
+
+        <div class="work-card">
+          <div class="work-badge">Personal Project</div>
+          <h3>Crossy Road, on a Custom PCB</h3>
+          <p>
+            A playable Crossy Road clone built around a hand-designed PCB game engine — from
+            schematic to working gameplay.
+          </p>
+          <div class="tag-row">
+            <span class="tag">PCB Design</span>
+            <span class="tag">Embedded</span>
+            <span class="tag">Hardware</span>
+          </div>
+        </div>
+
+        <div class="work-card">
+          <div class="work-badge">with the IFRC</div>
+          <h3>Solar Lighting for a Refugee Camp</h3>
+          <p>
+            Helped design a solar lighting system for a refugee camp in partnership with the
+            International Federation of Red Cross and Red Crescent Societies.
+          </p>
+          <div class="tag-row">
+            <span class="tag">Humanitarian Engineering</span>
+            <span class="tag">Renewable Energy</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container"><div class="divider"></div></div>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="pad" id="experience">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow"><span class="idx">04</span> — Experience</div>
+        <h2>Where I've <em>worked</em></h2>
+        <p>Safety-critical software, biosignal research, and a makerspace of my own running.</p>
+      </div>
+
+      <!-- Note: dates below are placeholders based on a typical timeline — swap in your real dates -->
+      <div class="timeline">
+        <div class="timeline-item current">
+          <div class="timeline-date">2025 — Present</div>
+          <h3>President <span class="org">&middot; Texas InventionWorks</span></h3>
+          <p>Leading UT Austin's student-run makerspace — setting direction and supporting a large team building projects across every discipline on campus.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Summer 2025</div>
+          <h3>Flight Controls System Engineering Intern <span class="org">&middot; Bell Textron</span></h3>
+          <p>Worked in embedded C on flight-control software held to DO-178 safety-critical standards, using IBM DOORS for requirements traceability.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2024 — 2025</div>
+          <h3>Undergraduate Researcher <span class="org">&middot; Lu Research Group</span></h3>
+          <p>Built EEG acquisition and seizure-classification tooling, reaching 93% classification accuracy.</p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2024 — Present</div>
+          <h3>Undergraduate Researcher <span class="org">&middot; Human Signals Lab</span></h3>
+          <p>Developing ML models that detect markers of cognitive impairment from speech recordings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container"><div class="divider"></div></div>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="pad" id="contact">
+    <div class="container">
+      <div class="section-head">
+        <div class="eyebrow"><span class="idx">05</span> — Contact</div>
+        <h2>Let's build <em>something</em></h2>
+        <p>Looking for a Fall 2026 co-op or internship in embedded systems, flight software, or robotics.</p>
+      </div>
+      <div class="contact-inner">
+        <div class="contact-links">
+          <a href="mailto:youremail@example.com">youremail@example.com <span class="arrow">↗</span></a>
+          <a href="https://linkedin.com/in/your-handle" target="_blank" rel="noopener">LinkedIn <span class="arrow">↗</span></a>
+          <a href="https://github.com/your-handle" target="_blank" rel="noopener">GitHub <span class="arrow">↗</span></a>
+          <a href="resume.pdf" target="_blank" rel="noopener">Résumé <span class="arrow">↗</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <span>© <span class="footer-year">2026</span> Yoshi &middot; Austin, TX</span>
+      <span>Built with orange, embedded C, and too much coffee.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Mobile nav toggle */
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', function(){
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    document.body.classList.toggle('menu-open', isOpen);
+  });
+  navLinks.querySelectorAll('a').forEach(function(link){
+    link.addEventListener('click', function(){
+      navLinks.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('menu-open');
+    });
+  });
+
+  /* Scroll spy */
+  const sections = document.querySelectorAll('main section[id]');
+  const links = navLinks.querySelectorAll('a[href^="#"]');
+  if('IntersectionObserver' in window){
+    const spy = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          links.forEach(function(l){
+            l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id);
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach(function(s){ spy.observe(s); });
+  }
+
+  /* Waveform draw-in */
+  const wavePath = document.querySelector('.waveform path');
+  if(wavePath){
+    if(prefersReduced){
+      wavePath.style.strokeDashoffset = 0;
+    } else {
+      const len = wavePath.getTotalLength();
+      wavePath.style.strokeDasharray = len;
+      wavePath.style.strokeDashoffset = len;
+      requestAnimationFrame(function(){
+        wavePath.style.transition = 'stroke-dashoffset 2.4s ease-out';
+        wavePath.style.strokeDashoffset = '0';
+      });
+    }
+  }
+
+  /* Count-up stats */
+  const statEls = document.querySelectorAll('.stat-num-val');
+  if('IntersectionObserver' in window){
+    const statObserver = new IntersectionObserver(function(entries, obs){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          const el = entry.target;
+          const target = parseFloat(el.dataset.target);
+          const suffix = el.dataset.suffix || '';
+          const isDecimal = el.dataset.target.indexOf('.') !== -1;
+          if(prefersReduced){
+            el.textContent = el.dataset.target + suffix;
+          } else {
+            const duration = 1400;
+            const startTime = performance.now();
+            (function tick(now){
+              const progress = Math.min((now - startTime) / duration, 1);
+              const value = target * progress;
+              el.textContent = (isDecimal ? value.toFixed(2) : Math.round(value)) + suffix;
+              if(progress < 1) requestAnimationFrame(tick);
+            })(startTime);
+          }
+          obs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    statEls.forEach(function(el){ statObserver.observe(el); });
+  }
+
+  /* Footer year */
+  const yearEl = document.querySelector('.footer-year');
+  if(yearEl) yearEl.textContent = new Date().getFullYear();
+})();
+</script>
+
 </body>
 </html>
