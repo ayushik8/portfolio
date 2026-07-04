@@ -470,3 +470,33 @@ body {
   pointer-events: none;
   mix-blend-mode: screen;
 }
+
+.nav__mobile-toggle {
+  display: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+/* MOBILE MENU */
+@media (max-width: 900px) {
+  .nav__links {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background: rgba(18, 18, 22, 0.95);
+    flex-direction: column;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  .nav__links.active {
+    display: flex;
+  }
+
+  .nav__mobile-toggle {
+    display: block;
+  }
+}
